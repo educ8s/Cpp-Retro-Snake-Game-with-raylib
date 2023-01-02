@@ -1,5 +1,5 @@
 #include <raylib.h>
-#include <vector>
+#include <deque>
 
 using namespace std;
 
@@ -35,11 +35,11 @@ bool operator==(Vector2 vector1, Vector2 vector2)
     return false;
 }
 
-bool ElementInVector(vector<Vector2> vector, Vector2 element)
+bool ElementInDeque(deque<Vector2> deque, Vector2 element)
 {
- for (size_t i = 0; i < vector.size(); i++)
+ for (size_t i= 0; i < deque.size(); i++)
     {
-        if(vector[i] == element){
+        if(deque[i] == element){
             return true;
         }
     }
@@ -49,7 +49,7 @@ bool ElementInVector(vector<Vector2> vector, Vector2 element)
 class Snake {
 
 public:
-vector<Vector2> body = {Vector2{6,9}, Vector2{5,9}, Vector2{4,9}};
+deque<Vector2> body = {Vector2{6,9}, Vector2{5,9}, Vector2{4,9}};
 Vector2 direction = {1, 0};
 bool add_segment = false;
 
@@ -66,13 +66,13 @@ void Draw(){
 void Update(){
 
     if (add_segment){
-        body.insert(body.begin(), Vector2{body[0].x + direction.x, body[0].y + direction.y} );
+        body.push_front(Vector2{body[0].x + direction.x, body[0].y + direction.y});
         add_segment = false;
     }
     else{
-    body.pop_back();
-    Vector2 head = {body[0].x + direction.x, body[0].y + direction.y};
-    body.insert(body.begin(), head);
+        body.pop_back();
+        Vector2 head = {body[0].x + direction.x, body[0].y + direction.y};
+        body.push_front(head);
     }
 }
 
@@ -101,9 +101,9 @@ void Draw()
     DrawTexture(texture, OFFSET + pos.x * cell_size, OFFSET + pos.y * cell_size, WHITE);   
 }
 
-void Recreate(vector<Vector2> snake_body) {
+void Recreate(deque<Vector2> snake_body) {
     pos = GenerateRandomPos();
-    while (ElementInVector(snake_body, pos))
+    while (ElementInDeque(snake_body, pos))
     {
         pos = GenerateRandomPos();
     }
@@ -160,9 +160,9 @@ public:
         }
     }
     void CheckCollisionWithSelf(){
-        vector<Vector2> body_without_head = snake.body;
-        body_without_head.erase(body_without_head.begin());
-        if(ElementInVector(body_without_head, snake.body[0]) )
+        deque<Vector2> body_without_head = snake.body;
+        body_without_head.pop_front();
+        if(ElementInDeque(body_without_head, snake.body[0]) )
         {
             GameOver();
         }
