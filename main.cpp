@@ -35,10 +35,7 @@ bool EventTriggered(double interval)
         lastUpdateTime = currentTime;
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 class Snake
@@ -244,6 +241,7 @@ int main()
             game.running = true;
         }
 
+        // Drawing
         ClearBackground(green);
         DrawRectangleLinesEx(Rectangle{(float)offset - 5, (float)offset - 5, (float)cellSize * cellCount + 10, (float)cellSize * cellCount + 10}, 5, dark_green);
         DrawText("Retro Snake", offset - 5, 20, 40, dark_green);
