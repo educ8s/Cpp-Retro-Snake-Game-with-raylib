@@ -6,7 +6,7 @@
 using namespace std;
 
 Color green = {173, 204, 96, 255};
-Color dark_green = {43, 51, 24, 255};
+Color darkGreen = {43, 51, 24, 255};
 
 int cellSize = 30;
 int cellCount = 25;
@@ -52,7 +52,7 @@ public:
             float x = body[i].x;
             float y = body[i].y;
             Rectangle segment = Rectangle{offset + x * cellSize, offset + y * cellSize, (float)cellSize, (float)cellSize};
-            DrawRectangleRounded(segment, 0.5, 6, dark_green);
+            DrawRectangleRounded(segment, 0.5, 6, darkGreen);
         }
     }
 
@@ -82,9 +82,9 @@ public:
     Vector2 position;
     Texture2D texture;
 
-    Food(deque<Vector2> snake_body)
+    Food(deque<Vector2> snakeBody)
     {
-        position = GenerateRandomPos(snake_body);
+        position = GenerateRandomPos(snakeBody);
         Image image = LoadImage("Graphics/food.png");
         texture = LoadTextureFromImage(image);
         UnloadImage(image);
@@ -107,10 +107,10 @@ public:
         return Vector2{x, y};
     }
 
-    Vector2 GenerateRandomPos(deque<Vector2> snake_body)
+    Vector2 GenerateRandomPos(deque<Vector2> snakeBody)
     {
         Vector2 position = GenerateRandomCell();
-        while (ElementInDeque(position, snake_body))
+        while (ElementInDeque(position, snakeBody))
         {
             position = GenerateRandomCell();
         }
@@ -243,9 +243,9 @@ int main()
 
         // Drawing
         ClearBackground(green);
-        DrawRectangleLinesEx(Rectangle{(float)offset - 5, (float)offset - 5, (float)cellSize * cellCount + 10, (float)cellSize * cellCount + 10}, 5, dark_green);
-        DrawText("Retro Snake", offset - 5, 20, 40, dark_green);
-        DrawText(TextFormat("%i", game.score), offset - 5, offset + cellSize * cellCount + 10, 40, dark_green);
+        DrawRectangleLinesEx(Rectangle{(float)offset - 5, (float)offset - 5, (float)cellSize * cellCount + 10, (float)cellSize * cellCount + 10}, 5, darkGreen);
+        DrawText("Retro Snake", offset - 5, 20, 40, darkGreen);
+        DrawText(TextFormat("%i", game.score), offset - 5, offset + cellSize * cellCount + 10, 40, darkGreen);
         game.Draw();
         EndDrawing();
     }
