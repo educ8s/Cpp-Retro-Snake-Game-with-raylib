@@ -26,7 +26,7 @@ bool ElementInDeque(Vector2 element, deque<Vector2> deque)
     return false;
 }
 
-bool eventTriggered(double interval)
+bool EventTriggered(double interval)
 {
     double currentTime = GetTime();
     if (currentTime - lastUpdateTime >= interval)
@@ -214,7 +214,7 @@ int main()
     {
         BeginDrawing();
 
-        if (eventTriggered(0.2))
+        if (EventTriggered(0.2))
         {
             game.Update();
         }
@@ -249,7 +249,6 @@ int main()
 
         EndDrawing();
     }
-
     CloseWindow();
     return 0;
 }
