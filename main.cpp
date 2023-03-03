@@ -12,6 +12,8 @@ int cellSize = 30;
 int cellCount = 25;
 int offset = 75;
 
+double lastUpdateTime = 0;
+
 bool ElementInDeque(Vector2 element, deque<Vector2> deque)
 {
     for (unsigned int i = 0; i < deque.size(); i++)
@@ -24,12 +26,9 @@ bool ElementInDeque(Vector2 element, deque<Vector2> deque)
     return false;
 }
 
-double lastUpdateTime = 0;
-
-bool EventTriggered(double interval)
+bool eventTriggered(double interval)
 {
     double currentTime = GetTime();
-
     if (currentTime - lastUpdateTime >= interval)
     {
         lastUpdateTime = currentTime;
@@ -78,16 +77,17 @@ public:
 
 class Food
 {
+
 public:
     Vector2 position;
     Texture2D texture;
 
     Food(deque<Vector2> snakeBody)
     {
-        position = GenerateRandomPos(snakeBody);
         Image image = LoadImage("Graphics/food.png");
         texture = LoadTextureFromImage(image);
         UnloadImage(image);
+        position = GenerateRandomPos(snakeBody);
     }
 
     ~Food()
@@ -182,6 +182,15 @@ public:
         }
     }
 
+    void GameOver()
+    {
+        snake.Reset();
+        food.position = food.GenerateRandomPos(snake.body);
+        running = false;
+        score = 0;
+        PlaySound(wallSound);
+    }
+
     void CheckCollisionWithTail()
     {
         deque<Vector2> headlessBody = snake.body;
@@ -191,22 +200,12 @@ public:
             GameOver();
         }
     }
-
-    void GameOver()
-    {
-        snake.Reset();
-        food.position = food.GenerateRandomPos(snake.body);
-        running = false;
-        score = 0;
-        PlaySound(wallSound);
-    }
 };
 
 int main()
 {
     cout << "Starting the game..." << endl;
     InitWindow(2 * offset + cellSize * cellCount, 2 * offset + cellSize * cellCount, "Retro Snake");
-
     SetTargetFPS(60);
 
     Game game = Game();
@@ -215,7 +214,7 @@ int main()
     {
         BeginDrawing();
 
-        if (EventTriggered(0.2))
+        if (eventTriggered(0.2))
         {
             game.Update();
         }
@@ -247,6 +246,7 @@ int main()
         DrawText("Retro Snake", offset - 5, 20, 40, darkGreen);
         DrawText(TextFormat("%i", game.score), offset - 5, offset + cellSize * cellCount + 10, 40, darkGreen);
         game.Draw();
+
         EndDrawing();
     }
 
